@@ -32,10 +32,10 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-          
+
       - uses: actions/download-artifact@v3
         with:
-          name: ${{needs.build.outputs.artifact_id}}-artifacts
+          name: commands-4.17.0
           path: ./
 
       - name: Terraform Format
