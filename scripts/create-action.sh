@@ -4,7 +4,7 @@ COMMAND="${1//-/_}" #replace dashes with underscore
 COMMAND="${COMMAND/ /_}" #replace spaces with underscore
 
 VERSION=$2
-path="./.github/actions/$COMMAND"
+path="./action/$COMMAND"
 
 if [[ $COMMAND == "global_options" ]]; then
   exit 0
