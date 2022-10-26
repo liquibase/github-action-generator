@@ -92,3 +92,5 @@ jobs:
 
       - name: Push Action to Repo
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" 4.17.0
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
