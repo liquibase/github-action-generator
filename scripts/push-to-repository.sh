@@ -36,4 +36,4 @@ git commit -m "auto generated v$TAG"
 git tag v$TAG
 
 # push commit
-git push origin v$TAG
+git push origin v$TAG --set-upstream main
