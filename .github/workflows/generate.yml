@@ -87,8 +87,8 @@ jobs:
 
       - name: Configure git user
         run: |
-          git config user.name "liquibot"
-          git config user.email "liquibot@liquibase.org"
+          git config --global user.name "liquibot"
+          git config --global user.email "liquibot@liquibase.org"
 
       - name: Push Action to Repo
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" 4.17.0
