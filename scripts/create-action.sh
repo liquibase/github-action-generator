@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 COMMAND="${1//-/_}" #replace dashes with underscore
 COMMAND="${COMMAND/ /_}" #replace spaces with underscore
 
