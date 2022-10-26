@@ -1,16 +1,12 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 COMMAND="${1/ /-}" #replace spaces with dashes
 TAG=$2
 REPO="https://liquibot:$BOT_TOKEN@github.com/liquibase-github-actions/$COMMAND.git"
 COMMAND_DIR="$PWD/action/$COMMAND"
 TEMP_DIR="$PWD/action/temp"
-
-echo $REPO
-echo $COMMAND_DIR
-echo $TEMP_DIR
 
 if [[ -z "$BOT_TOKEN" ]]; then
   echo "Set the BOT_TOKEN env variable."
