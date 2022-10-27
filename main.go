@@ -162,7 +162,7 @@ func generateReadme(p *protogen.Plugin, file *protogen.File, version string) err
 	g.P("```yaml")
 	g.P("steps:")
 	g.P("  - uses: actions/checkout@v3")
-	g.P("  - uses: liquibase-github-actions/liquibase-" + kebab.ToLower() + "-action@v" + version)
+	g.P("  - uses: liquibase-github-actions/" + kebab.ToLower() + "@v" + version)
 	g.P("    with:")
 	if len(required) > 0 {
 		for _, f := range required {
