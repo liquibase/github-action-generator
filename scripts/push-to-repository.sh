@@ -15,12 +15,16 @@ fi
 
 # Set up target repository
 {
-  git clone --single-branch --depth 1 --branch "main" "$REPO" "$TEMP_DIR"
+  mkdir -p $TEMP_DIR
+  cd $TEMP_DIR
+  git clone --single-branch --depth 1 --branch "main" "$REPO" ./
 } || {
   mkdir -p $TEMP_DIR
   cd $TEMP_DIR
   git init
   git remote add origin $REPO
+
+  # create issue in generator repo to release new action to marketplace
 }
 
 # Copy generated files to temp dir
