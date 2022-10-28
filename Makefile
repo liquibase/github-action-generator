@@ -11,7 +11,7 @@ docker:
 #create-list: docker
 create-list:
 	#docker run --rm -v $(PWD):/proto liquibase-protobuf-generator:$(VERSION) --output-file=commands.json list-commands
-	echo "[\"validate\"]" > commands.json
+	echo "[\"update\",\"validate\"]" > commands.json
 
 generate: build docker
 	docker run --rm -v $(PWD):/proto liquibase-protobuf-generator:$(VERSION) generate-protobuf --target-command="$(COMMAND)" --output-dir /proto
