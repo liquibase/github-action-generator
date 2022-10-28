@@ -119,7 +119,12 @@ func generateReadme(p *protogen.Plugin, file *protogen.File, version string) err
 	c := cases.Title(language.English)
 	g.P("# Liquibase " + c.String(cmdReadable) + " Action")
 	g.P("Official GitHub Action to run Liquibase " + c.String(cmdReadable) + " in your GitHub Action Workflow. For more information on how " + cmdReadable + " works visit the [Official Liquibase Documentation](https://docs.liquibase.com/commands/home.html).")
-	g.P()
+	g.P("## " + c.String(cmdReadable))
+	for _, l := range file.Proto.GetSourceCodeInfo().GetLocation() {
+		if l.GetLeadingComments() != "" {
+			g.P(strings.TrimSpace(l.GetLeadingComments()))
+		}
+	}
 	g.P("## Usage")
 	g.P("```yaml")
 	g.P("steps:")
