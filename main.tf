@@ -19,7 +19,7 @@ provider "github" {
 }
 
 locals {
-  commands = jsondecode(file("${path.module}/commands.json"))
+  commands = distinct(jsondecode(file("${path.module}/commands.json")))
 }
 
 resource "github_repository" "liquibase-github-actions" {
