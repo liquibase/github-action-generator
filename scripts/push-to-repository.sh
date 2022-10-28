@@ -2,6 +2,8 @@
 
 set -e
 
+source create-issue.sh
+
 COMMAND="${1/ /-}" #replace spaces with dashes
 TAG=$2
 REPO="https://liquibot:$BOT_TOKEN@github.com/liquibase-github-actions/$COMMAND.git"
@@ -24,7 +26,8 @@ fi
   git init
   git remote add origin $REPO
 
-  # create issue in generator repo to release new action to marketplace
+  # create github issue in generator repo
+  create_issue $COMMAND
 }
 
 # Copy generated files to temp dir
