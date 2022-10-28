@@ -19,13 +19,13 @@ provider "github" {
 }
 
 locals {
-  commands = distinct(jsondecode(file("${path.module}/commands.json")))
+  commands = toset(jsondecode(file("${path.module}/commands.json")))
 }
 
 resource "github_repository" "liquibase-github-actions" {
-  count           = length(local.commands)
-  name            = replace(local.commands[count.index], " ", "-")
-  description     = "Official GitHub Action to run Liquibase ${title(replace(local.commands[count.index], "-", " "))}"
+  for_each = local.commands
+  name            = replace(each.key, " ", "-")
+  description     = "Official GitHub Action to run Liquibase ${title(replace(each.key, "-", " "))}"
   visibility      = "public"
   has_downloads   = false
   has_issues      = false
