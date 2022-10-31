@@ -27,7 +27,6 @@ create_issue() {
     -d "{\"title\":\"$TITLE\",\"body\":\"$BODY\",\"labels\":[\"enhancement\"]}"
 }
 
-
 # Set up target repository
 {
   mkdir -p $TEMP_DIR
@@ -46,10 +45,24 @@ create_issue() {
 # Copy generated files to temp dir
 cp $COMMAND_DIR/* $TEMP_DIR
 
-# Commit new files and tag
-git add *
-git commit -m "auto generated v$TAG"
-git tag v$TAG
+if [[ `git status --porcelain` ]]; then
+  # Commit new files
+  git add *
+  git commit -m "auto generated v$TAG"
 
-# push commit
-git push origin v$TAG --set-upstream main
+  if git show-ref --tags v$TAG --quiet; then
+    # if tag exists override
+    git tag -f v$TAG
+    git push origin --set-upstream main
+    git push origin -f v$TAG
+  else
+    # create and push new tag
+    git tag v$TAG
+    git push origin v$TAG --set-upstream main
+  fi
+else
+  echo "No files changed."
+  exit 0
+fi
+
+
