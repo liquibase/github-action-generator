@@ -39,6 +39,6 @@ then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i '' "s/LIQUIBASE_VERSION: $WORKFLOW_TAG/LIQUIBASE_VERSION: $RELEASE_TAG/g" ./.github/workflows/generate.yml
   else
-    sed -i "s/LIQUIBASE_VERSION: $WORKFLOW_TAG/LIQUIBASE_VERSION=: $RELEASE_TAG/g" ./.github/workflows/generate.yml
+    sed -i "s/LIQUIBASE_VERSION: $WORKFLOW_TAG/LIQUIBASE_VERSION: $RELEASE_TAG/g" ./.github/workflows/generate.yml
   fi
 fi
