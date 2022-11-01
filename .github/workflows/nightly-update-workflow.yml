@@ -1,0 +1,30 @@
+name: Update Generate Workflow
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '5 6 * * *'
+
+jobs:
+  update-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update Workflow
+        run: ./scripts/get-latest-release.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Automatic update to generate.yml
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          branch: update/workflow
+          delete-branch: true
+          title: '[Automatic] Update generate.yml'
+          body: |
+            Automatic update to generate.yml
+          draft: false
