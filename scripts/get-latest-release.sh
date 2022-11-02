@@ -35,18 +35,18 @@ get_workflow_release_tag() {
 RELEASE_TAG=$(get_latest_release_tag)
 WORKFLOW_TAG=$(get_workflow_release_tag)
 
-echo "Release Tag: $RELEASE_TAG \n"
-echo "Workflow Tag: $WORKFLOW_TAG \n"
+echo "Release Tag: $RELEASE_TAG"
+echo "Workflow Tag: $WORKFLOW_TAG"
 
 check_docker_hub_for_release() {
   local TAG=$1
   local DOCKER=$(curl -s https://hub.docker.com/v2/namespaces/liquibase/repositories/liquibase/tags?page_size=100)
   local CHECK=$(echo $DOCKER | jq --arg search "$TAG" -r '.results[] | select(.name == $search)')
   if [[ -n "$CHECK" ]]; then
-    echo "Docker Tag $TAG found \n"
+    echo "Docker Tag $TAG found"
     return 0
   else
-    echo "Docker Tag $TAG not found \n"
+    echo "Docker Tag $TAG not found"
     return 1
   fi
 }
