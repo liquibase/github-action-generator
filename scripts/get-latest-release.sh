@@ -8,12 +8,13 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
 fi
 
 get_latest_release_tag() {
-  RELEASE=$(curl -s \
+  local RELEASE=$(curl -s \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/liquibase/liquibase/releases/latest)
+    https://api.github.com/repos/liquibase/liquibase/releases/latest \
+  )
 
-  TAG=$(echo $RELEASE | jq -r '.tag_name')
+  local TAG=$(echo $RELEASE | jq -r '.tag_name')
 
   if [[ $TAG == v* ]];
   then echo "${TAG:1}";
@@ -34,7 +35,18 @@ get_workflow_release_tag() {
 RELEASE_TAG=$(get_latest_release_tag)
 WORKFLOW_TAG=$(get_workflow_release_tag)
 
-if [[ "$RELEASE_TAG" != "$WORKFLOW_TAG" ]];
+check_docker_hub_for_release() {
+  local TAG=$1
+  local DOCKER=$(curl -s https://hub.docker.com/v2/namespaces/liquibase/repositories/liquibase/tags?page_size=100)
+  local CHECK=$(echo $DOCKER | jq --arg search "$TAG" -r '.results[] | select(.name == $search)')
+  if [[ -n "$CHECK" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+if [[ "$RELEASE_TAG" != "$WORKFLOW_TAG" ]] && check_docker_hub_for_release "$RELEASE_TAG";
 then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i '' "s/LIQUIBASE_VERSION: $WORKFLOW_TAG/LIQUIBASE_VERSION: $RELEASE_TAG/g" ./.github/workflows/generate.yml
