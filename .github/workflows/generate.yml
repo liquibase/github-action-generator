@@ -84,7 +84,7 @@ jobs:
         uses: arduino/setup-protoc@v1
         with:
           version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.BOT_TOKEN }}
 
       - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
 
