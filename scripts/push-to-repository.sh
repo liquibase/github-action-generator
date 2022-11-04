@@ -71,8 +71,8 @@ if [[ `git status --porcelain` ]]; then
     # create and push new tag
     git tag v$TAG
     git push origin v$TAG --set-upstream main
-    create_release v$TAG "$REPO"
   fi
+  create_release v$TAG "$COMMAND"
 else
   echo "No files changed."
   exit 0
