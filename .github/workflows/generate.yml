@@ -74,7 +74,8 @@ jobs:
     needs: [ create-command-list, create-action-repo ]
     strategy:
       matrix:
-        commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
+#        commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
+        commands: ["update"]
     steps:
       - uses: actions/checkout@v3
 
