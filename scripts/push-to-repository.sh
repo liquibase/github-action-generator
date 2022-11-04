@@ -27,6 +27,18 @@ create_issue() {
     -d "{\"title\":\"$TITLE\",\"body\":\"$BODY\",\"labels\":[\"enhancement\"]}"
 }
 
+create_release() {
+  local TAG=$1
+  local REPO=$2
+
+  curl \
+    -X POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $BOT_TOKEN" \
+    https://api.github.com/repos/liquibase-github-actions/$REPO/releases \
+    -d "{\"tag_name\":\"$TAG\",\"name\":\"$TAG\",\"draft\":false,\"prerelease\":false,\"generate_release_notes\":true}"
+}
+
 # Set up target repository
 {
   mkdir -p $TEMP_DIR
@@ -59,6 +71,7 @@ if [[ `git status --porcelain` ]]; then
     # create and push new tag
     git tag v$TAG
     git push origin v$TAG --set-upstream main
+    create_release v$TAG "$REPO"
   fi
 else
   echo "No files changed."
