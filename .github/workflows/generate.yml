@@ -75,7 +75,7 @@ jobs:
     strategy:
       matrix:
 #        commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
-        commands: ["update","validate","status"]
+        commands: ["update","validate","status","diff"]
     steps:
       - uses: actions/checkout@v3
 
