@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/gobeam/stringy"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -202,7 +203,11 @@ func generateActionYaml(p *protogen.Plugin, file *protogen.File, globals []proto
 	g.P("name: 'Liquibase " + c.String(cmdReadable) + " Action'")
 	for _, l := range file.Proto.GetSourceCodeInfo().GetLocation() {
 		if l.GetLeadingComments() != "" {
-			g.P("description: '" + strings.TrimSpace(l.GetLeadingComments()) + "'")
+			if len(l.GetLeadingComments()) > 124 {
+				g.P("description: '" + fmt.Sprintf("%.121s", strings.TrimSpace(l.GetLeadingComments())) + "...'")
+			} else {
+				g.P("description: '" + strings.TrimSpace(l.GetLeadingComments()) + "'")
+			}
 		}
 	}
 	g.P("inputs:")
