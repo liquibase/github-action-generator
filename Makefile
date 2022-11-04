@@ -8,10 +8,8 @@ build:
 docker:
 	docker build -t liquibase-protobuf-generator:$(VERSION) . --build-arg VERSION=$(VERSION)
 
-#create-list: docker
-	#docker run --rm -v $(PWD):/proto liquibase-protobuf-generator:$(VERSION) --output-file=commands.json list-commands
-create-list:
-	echo "[\"update\"]" > commands.json
+create-list: docker
+	docker run --rm -v $(PWD):/proto liquibase-protobuf-generator:$(VERSION) --output-file=commands.json list-commands
 
 generate: build docker
 	docker run --rm -v $(PWD):/proto liquibase-protobuf-generator:$(VERSION) generate-protobuf --target-command="$(COMMAND)" --output-dir /proto
