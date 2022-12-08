@@ -7,4 +7,4 @@ VOLUME /proto
 WORKDIR /proto
 USER liquibase
 
-RUN lpm update && lpm add protobuf-generator@v0.3.2 --global
+RUN lpm update && lpm add protobuf-generator@v0.3.3 --global
