@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  LIQUIBASE_VERSION: 4.18.0
+  LIQUIBASE_VERSION: 4.19.0
 
 jobs:
   create-command-list:
