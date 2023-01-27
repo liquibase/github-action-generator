@@ -293,7 +293,10 @@ func generateBashEntry(p *protogen.Plugin, file *protogen.File, globals []protor
 		var cmd string
 		s := strings.TrimPrefix(string(message.Messages[0].Desc.FullName()), "liquibase.")
 		for _, c := range strings.Split(s, ".") {
-			d := strings.TrimSuffix(c, "Request")
+            d := strings.TrimSuffix(c, "Request")
+            if d == "pro" {
+                continue
+            }
 			str := stringy.New(d)
 			cmd += str.KebabCase().ToLower() + " "
 		}
