@@ -4,6 +4,6 @@ go 1.18
 
 require (
 	github.com/gobeam/stringy v0.0.5
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.3.8
 	google.golang.org/protobuf v1.28.1
 )
