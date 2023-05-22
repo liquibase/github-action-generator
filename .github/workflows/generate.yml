@@ -58,7 +58,7 @@ jobs:
         run: terraform plan -no-color
         continue-on-error: true
         env:
-          TF_VAR_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
@@ -67,7 +67,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
-          TF_VAR_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
 
   generate-action:
     runs-on: ubuntu-latest
@@ -97,7 +97,7 @@ jobs:
       - name: Push Action to Repo
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
           
   output-action:
     runs-on: ubuntu-latest
