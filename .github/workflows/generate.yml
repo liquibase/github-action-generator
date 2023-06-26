@@ -97,7 +97,7 @@ jobs:
       - name: Push Action to Repo
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
         env:
-          BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           
   output-action:
     runs-on: ubuntu-latest
