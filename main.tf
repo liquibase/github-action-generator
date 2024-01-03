@@ -1,5 +1,6 @@
 terraform {
-  cloud {
+  backend "remote" {
+    hostname     = "spacelift.io"
     organization = "liquibase"
     workspaces {
       name = "liquibase-github-actions"
