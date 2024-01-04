@@ -70,18 +70,6 @@ jobs:
         run: terraform apply -auto-approve -lock=false
         continue-on-error: true
 
-      - name: Terraform State Push
-        run: |
-          cat errored.tfstate
-          STATE_FILE="errored.tfstate"
-          current_serial=$(jq -r '.serial' "$STATE_FILE")
-          echo "Current serial: $current_serial"
-          new_serial=$((current_serial + 1))
-          echo "New serial: $new_serial"
-          jq ". + {\"serial\": $new_serial, \"terraform_version\": \"1.5.7\"}" "$STATE_FILE" > tmpfile && mv tmpfile "$STATE_FILE"
-          cat errored.tfstate
-          terraform state push -lock=false -force errored.tfstate 
-
   generate-action:
     runs-on: ubuntu-latest
     needs: [ create-command-list, create-action-repo ]
