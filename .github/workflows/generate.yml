@@ -76,7 +76,7 @@ jobs:
 
       - name: Terraform Push state
         id: push
-        run: terraform state push current_state.tfstate
+        run: terraform state push -lock=false current_state.tfstate
 
   generate-action:
     runs-on: ubuntu-latest
