@@ -51,7 +51,11 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -reconfigure
+
+      - name: Terraform Pull state
+        id: pull
+        run: terraform state pull > current_state.tfstate
 
       - name: Terraform Validate
         id: validate
@@ -69,6 +73,10 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -lock=false
         continue-on-error: true
+
+      - name: Terraform Push state
+        id: push
+        run: terraform state push current_state.tfstate
 
   generate-action:
     runs-on: ubuntu-latest
