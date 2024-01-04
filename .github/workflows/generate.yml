@@ -55,7 +55,9 @@ jobs:
 
       - name: Terraform Pull state
         id: pull
-        run: terraform state pull > current_state.tfstate
+        run: |
+          terraform state pull > current.tfstate
+          terraform init -force-copy -backend=false
 
       - name: Terraform Validate
         id: validate
@@ -76,7 +78,9 @@ jobs:
 
       - name: Terraform Push state
         id: push
-        run: terraform state push -lock=false current_state.tfstate
+        run: |
+          terraform init -reconfigure
+          terraform state push -lock=false current.tfstate
 
   generate-action:
     runs-on: ubuntu-latest
