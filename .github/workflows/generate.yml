@@ -40,6 +40,11 @@ jobs:
           name: commands-$LIQUIBASE_VERSION
           path: ./
 
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+
       - name: Terraform Format
         id: fmt
         run: terraform fmt
@@ -54,69 +59,69 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -lock=false
+        run: terraform plan -no-color
         continue-on-error: true
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -lock=false
-        continue-on-error: true
+  #     - name: Terraform Apply
+  #       run: terraform apply -auto-approve -lock=false
+  #       continue-on-error: true
 
-      - name: Terraform State Push
-        run: |
-          cat errored.tfstate
-          STATE_FILE="errored.tfstate"
-          current_serial=$(jq -r '.serial' "$STATE_FILE")
-          echo "Current serial: $current_serial"
-          new_serial=$((current_serial + 1))
-          echo "New serial: $new_serial"
-          jq ". + {\"serial\": $new_serial, \"terraform_version\": \"1.5.7\"}" "$STATE_FILE" > tmpfile && mv tmpfile "$STATE_FILE"
-          cat errored.tfstate
-          terraform state push -lock=false -force errored.tfstate 
+  #     - name: Terraform State Push
+  #       run: |
+  #         cat errored.tfstate
+  #         STATE_FILE="errored.tfstate"
+  #         current_serial=$(jq -r '.serial' "$STATE_FILE")
+  #         echo "Current serial: $current_serial"
+  #         new_serial=$((current_serial + 1))
+  #         echo "New serial: $new_serial"
+  #         jq ". + {\"serial\": $new_serial, \"terraform_version\": \"1.5.7\"}" "$STATE_FILE" > tmpfile && mv tmpfile "$STATE_FILE"
+  #         cat errored.tfstate
+  #         terraform state push -lock=false -force errored.tfstate 
 
-  generate-action:
-    runs-on: ubuntu-latest
-    needs: [ create-command-list, create-action-repo ]
-    strategy:
-      matrix:
-        commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v3
+  # generate-action:
+  #   runs-on: ubuntu-latest
+  #   needs: [ create-command-list, create-action-repo ]
+  #   strategy:
+  #     matrix:
+  #       commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - run: echo ${{ matrix.commands }}
+  #     - run: echo ${{ matrix.commands }}
 
-      - name: Install Protoc
-        uses: arduino/setup-protoc@v1
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.BOT_TOKEN }}
+  #     - name: Install Protoc
+  #       uses: arduino/setup-protoc@v1
+  #       with:
+  #         version: '3.x'
+  #         repo-token: ${{ secrets.BOT_TOKEN }}
 
-      - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
+  #     - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
 
-      - name: Configure git user
-        run: |
-          git config --global init.defaultBranch main
-          git config --global user.name "liquibot"
-          git config --global user.email "liquibot@liquibase.org"
+  #     - name: Configure git user
+  #       run: |
+  #         git config --global init.defaultBranch main
+  #         git config --global user.name "liquibot"
+  #         git config --global user.email "liquibot@liquibase.org"
 
-      - name: Push Action to Repo
-        run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
-        env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+  #     - name: Push Action to Repo
+  #       run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
+  #       env:
+  #         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           
-  output-action:
-    runs-on: ubuntu-latest
-    needs: [ generate-action ]
-    steps:
-      - uses: actions/checkout@v3
+  # output-action:
+  #   runs-on: ubuntu-latest
+  #   needs: [ generate-action ]
+  #   steps:
+  #     - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: commands-$LIQUIBASE_VERSION
-          path: ./
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: commands-$LIQUIBASE_VERSION
+  #         path: ./
 
-      - name: Output Action Edit Link
-        run: ./scripts/output-release-edit.sh "v$LIQUIBASE_VERSION"
+  #     - name: Output Action Edit Link
+  #       run: ./scripts/output-release-edit.sh "v$LIQUIBASE_VERSION"
