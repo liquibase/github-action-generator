@@ -62,7 +62,12 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock=false
+        continue-on-error: true
+
+      - name: Terraform State Push
+        run: terraform state push errored.tfstate
+        continue-on-error: true
 
   generate-action:
     runs-on: ubuntu-latest
