@@ -35,6 +35,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_version: "1.5.7"
 
       - uses: actions/download-artifact@v3
         with:
