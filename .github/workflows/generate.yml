@@ -62,7 +62,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve -lock=false
+        run: terraform apply -auto-approve
 
   generate-action:
     runs-on: ubuntu-latest
