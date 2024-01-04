@@ -66,7 +66,9 @@ jobs:
         continue-on-error: true
 
       - name: Terraform State Push
-        run: terraform state push -lock=false -force errored.tfstate 
+        run: |
+          cat errored.tfstate
+          terraform state push -lock=false -force errored.tfstate 
 
   generate-action:
     runs-on: ubuntu-latest
