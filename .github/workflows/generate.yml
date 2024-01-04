@@ -27,9 +27,8 @@ jobs:
 
   create-action-repo:
     env:
-      SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
-      SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
-      SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+      TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
+
     runs-on: ubuntu-latest
     needs: [ create-command-list ]
     steps:
@@ -54,7 +53,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -lock=false
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -62,7 +61,7 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -lock=false
 
   generate-action:
     runs-on: ubuntu-latest
