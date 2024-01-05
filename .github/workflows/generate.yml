@@ -62,17 +62,14 @@ jobs:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-        run: |
-          # We need to remove commands.json from the .gitignore file because Spacelift respects .gitignore files and the fil won't be uploaded
-          sed -i '/commands\.json/d' .gitignore
-          spacectl stack local-preview --id liquibase-github-actions
+        run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
       - name: Deploy infrastructure
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-        run: spacectl stack deploy --id liquibase-github-actions
+        run: spacectl stack deploy --id liquibase-github-actions --auto-confirm
 
   generate-action:
     runs-on: ubuntu-latest
