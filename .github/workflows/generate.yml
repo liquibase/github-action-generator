@@ -35,10 +35,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.5.7"
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/download-artifact@v3
         with:
@@ -51,36 +51,25 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init -reconfigure
-
-      - name: Terraform Pull state
-        id: pull
-        run: |
-          terraform state pull > current.tfstate
-          terraform init -force-copy -backend=false
+        run: terraform init
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color -lock=false
-        continue-on-error: true
+      - name: Preview infrastructure
+        env:
+          SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        run: spacectl stack local-preview --id liquibase-github-actions
 
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -lock=false
-        continue-on-error: true
-
-      - name: Terraform Push state
-        id: push
-        run: |
-          terraform init -reconfigure
-          terraform state push -lock=false current.tfstate
+      # - name: Deploy infrastructure
+      #   env:
+      #     SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+      #     SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+      #     SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+      #   run: spacectl stack deploy --id liquibase-github-actions
 
   generate-action:
     runs-on: ubuntu-latest

@@ -1,12 +1,4 @@
 terraform {
-  required_version = "1.5.7"
-  backend "remote" {
-    hostname     = "spacelift.io"
-    organization = "liquibase"
-    workspaces {
-      name = "liquibase-github-actions"
-    }
-  }
   required_providers {
     github = {
       source  = "integrations/github"
