@@ -64,6 +64,21 @@ jobs:
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
         run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
+      - name: Check for commands.json changes
+        id: check_changes
+        run: |
+          git diff --exit-code || echo "Changes found"
+
+      - name: Commit and push commands.json changes
+        if: steps.check_changes.outputs.code == '0'
+        run: |
+          git config --global init.defaultBranch main
+          git config --global user.name "liquibot"
+          git config --global user.email "liquibot@liquibase.org"
+          git add commands.json
+          git commit -m "Update commands.json" -a
+          git push
+
       - name: Deploy infrastructure
         if: github.ref == 'refs/heads/main'
         env:
@@ -71,7 +86,7 @@ jobs:
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
         run: |
-          spacectl stack set-current-commit --id liquibase-github-actions --commit ${{ github.sha }}
+          spacectl stack set-current-commit --id liquibase-github-actions
           spacectl stack deploy --id liquibase-github-actions --auto-confirm 
 
   generate-action:
