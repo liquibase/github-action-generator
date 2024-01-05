@@ -3,6 +3,5 @@ protoc-gen-liquibase
 notes
 liquibase_libs
 .terraform
-commands.json
 action
 .fleet
