@@ -26,15 +26,19 @@ jobs:
           path: commands.json
 
   create-action-repo:
+    env:
+      TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+      TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
+
     runs-on: ubuntu-latest
     needs: [ create-command-list ]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/download-artifact@v3
         with:
@@ -53,25 +57,27 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
+      - name: Preview infrastructure
         env:
-          TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+          SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
-      - name: Terraform Plan Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Deploy infrastructure
+        if: github.ref == 'refs/heads/main'
         env:
-          TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+          SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+          SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+          SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+        run: |
+          spacectl stack set-current-commit --id liquibase-github-actions --commit ${{ github.sha }}
+          spacectl stack deploy --id liquibase-github-actions --auto-confirm 
 
   generate-action:
     runs-on: ubuntu-latest
     needs: [ create-command-list, create-action-repo ]
+    if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
         commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
@@ -98,7 +104,7 @@ jobs:
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          
+
   output-action:
     runs-on: ubuntu-latest
     needs: [ generate-action ]
