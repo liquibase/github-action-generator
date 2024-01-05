@@ -64,13 +64,8 @@ jobs:
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
         run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
-      - name: Check for commands.json changes
-        id: check_changes
-        run: |
-          git diff --exit-code || echo "Changes in commands.json found"
-
       - name: Commit and push commands.json changes
-        if: steps.check_changes.outputs.code == '0'
+        continue-on-error: true
         run: |
           git config --global user.name "liquibot"
           git config --global user.email "liquibot@liquibase.org"
