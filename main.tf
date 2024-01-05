@@ -13,7 +13,7 @@ provider "github" {
 }
 
 locals {
-  commands = jsondecode(file("commands.json"))
+  commands = jsondecode(file("${path.module}/commands.json"))
 }
 
 resource "github_repository" "liquibase-github-actions" {
