@@ -62,7 +62,7 @@ jobs:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-        run: spacectl stack local-preview --id liquibase-github-actions
+        run: spacectl stack preview --id liquibase-github-actions
 
       # - name: Deploy infrastructure
       #   env:
