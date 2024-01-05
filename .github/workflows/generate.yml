@@ -67,15 +67,14 @@ jobs:
       - name: Check for commands.json changes
         id: check_changes
         run: |
-          git diff --exit-code || echo "Changes found"
+          git diff --exit-code || echo "Changes in commands.json found"
 
       - name: Commit and push commands.json changes
         if: steps.check_changes.outputs.code == '0'
         run: |
-          git config --global init.defaultBranch main
           git config --global user.name "liquibot"
           git config --global user.email "liquibot@liquibase.org"
-          git add commands.json
+          git add --force commands.json
           git commit -m "Update commands.json" -a
           git push
 
