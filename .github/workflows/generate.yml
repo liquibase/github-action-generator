@@ -86,7 +86,7 @@ jobs:
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
         run: |
-          spacectl stack set-current-commit --id liquibase-github-actions
+          spacectl stack set-current-commit --id liquibase-github-actions --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-github-actions --auto-confirm 
 
   generate-action:
