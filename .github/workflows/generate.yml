@@ -64,14 +64,9 @@ jobs:
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
         run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
-      - name: Commit and push commands.json changes
-        continue-on-error: true
+      - name: Mount commands.json
         run: |
-          git config --global user.name "liquibot"
-          git config --global user.email "liquibot@liquibase.org"
-          git add --force commands.json
-          git commit -m "Update commands.json" -a
-          git push
+          spacectl stack environment mount --id liquibase-github-actions commands.json commands.json
 
       - name: Deploy infrastructure
         if: github.ref == 'refs/heads/main'
