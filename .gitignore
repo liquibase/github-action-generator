@@ -6,3 +6,4 @@ liquibase_libs
 commands.json
 action
 .fleet
+.terraform.lock.hcl
