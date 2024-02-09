@@ -13,7 +13,7 @@ provider "github" {
 }
 
 locals {
-  commands = jsondecode(file("${path.module}/commands.json"))
+  commands = fileexists("${path.module}/commands.json")
 }
 
 output "commands_file_exists" {
