@@ -13,7 +13,7 @@ provider "github" {
 }
 
 locals {
-  commands = jsondecode(file("/mnt/workspace/commands.json))
+  commands = jsondecode(file("/mnt/workspace/commands.json"))
 }
 
 resource "github_repository" "liquibase-github-actions" {
