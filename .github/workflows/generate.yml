@@ -30,7 +30,9 @@ jobs:
     env:
       TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
-
+      SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+      SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+      SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
     runs-on: ubuntu-latest
     needs: [ create-command-list ]
     steps:
