@@ -67,7 +67,7 @@ jobs:
           spacectl stack environment mount --id liquibase-github-actions commands.json commands.json
 
       - name: Deploy infrastructure
-        if: github.ref == 'refs/heads/main'
+#        if: github.ref == 'refs/heads/main'
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
