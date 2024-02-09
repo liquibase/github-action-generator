@@ -12,12 +12,14 @@ provider "github" {
   owner = "liquibase-github-actions"
 }
 
-data "external" "commands" {
-  program = ["cat", "/mnt/workspace/commands.json"]
+data "null_data_source" "commands" {
+  inputs = {
+    file_contents = file("${path.module}/commands.json")
+  }
 }
 
 locals {
-  commands = jsondecode(file("/mnt/workspace/commands.json"))
+  commands = jsondecode(data.null_data_source.commands.outputs.file_contents)
 }
 
 resource "github_repository" "liquibase-github-actions" {
