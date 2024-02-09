@@ -27,9 +27,8 @@ jobs:
 
   create-action-repo:
     env:
-      TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+      TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
-      TF_VAR_LIQUIBOT_PAT: ${{ secrets.LIQUIBOT_PAT }}
 
     runs-on: ubuntu-latest
     needs: [ create-command-list ]
