@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: commands-$LIQUIBASE_VERSION
+          name: commands-${{ env.LIQUIBASE_VERSION }}
           path: commands.json
 
   create-action-repo:
@@ -94,7 +94,7 @@ jobs:
           version: '3.x'
           repo-token: ${{ secrets.BOT_TOKEN }}
 
-      - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
+      - run: make generate VERSION=${{ env.LIQUIBASE_VERSION }} COMMAND="${{ matrix.commands }}"
 
       - name: Configure git user
         run: |
@@ -103,7 +103,7 @@ jobs:
           git config --global user.email "liquibot@liquibase.org"
 
       - name: Push Action to Repo
-        run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
+        run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" ${{ env.LIQUIBASE_VERSION }}
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
 
@@ -115,8 +115,8 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: commands-$LIQUIBASE_VERSION
+          name: commands-${{ env.LIQUIBASE_VERSION }}
           path: ./
 
       - name: Output Action Edit Link
-        run: ./scripts/output-release-edit.sh "v$LIQUIBASE_VERSION"
+        run: ./scripts/output-release-edit.sh "v${{ env.LIQUIBASE_VERSION }}"
