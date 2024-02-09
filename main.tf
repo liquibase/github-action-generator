@@ -17,7 +17,7 @@ locals {
 }
 
 output "commands_file_exists" {
-  value = local.commands_file_exists
+  value = local.commands
 }
 
 resource "github_repository" "liquibase-github-actions" {
