@@ -14,7 +14,7 @@ provider "github" {
 
 data "null_data_source" "commands" {
   inputs = {
-    file_contents = file("${path.module}/commands.json")
+    file_contents = file("/mnt/workspace/commands.json")
   }
 }
 
