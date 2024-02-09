@@ -16,6 +16,10 @@ locals {
   commands = jsondecode(file("${path.module}/commands.json"))
 }
 
+output "commands_file_exists" {
+  value = local.commands_file_exists
+}
+
 resource "github_repository" "liquibase-github-actions" {
   for_each      = toset(local.commands)
   name          = replace(each.key, " ", "-")

@@ -65,15 +65,12 @@ jobs:
       - name: Mount commands.json
         run: |
           spacectl stack environment mount --id liquibase-github-actions commands.json commands.json
-          echo "commands_file_path=${commands_file_path}" 
 
       - name: Deploy infrastructure
-#        if: github.ref == 'refs/heads/main'
         env:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-          #COMMANDS_FILE_PATH: ${{ env.commands_file_path }}
         run: |
           spacectl stack set-current-commit --id liquibase-github-actions --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-github-actions --auto-confirm 
