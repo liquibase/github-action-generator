@@ -17,7 +17,7 @@ data "external" "commands" {
 }
 
 locals {
-  commands = jsondecode(data.external.commands.result)
+  commands = jsondecode("{ \"commands\": ${data.external.commands.result} }")["commands"]
 }
 
 resource "github_repository" "liquibase-github-actions" {
