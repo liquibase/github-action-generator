@@ -26,6 +26,7 @@ jobs:
           path: commands.json
 
   create-action-repo:
+    permissions: write-all
     env:
       TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
