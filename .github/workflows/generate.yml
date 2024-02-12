@@ -64,7 +64,7 @@ jobs:
 
       - name: Mount commands.json
         run: |
-          spacectl stack environment mount --id liquibase-github-actions commands.json commands.json
+          spacectl stack environment mount --id liquibase-github-actions source/commands.json commands.json
 
       - name: Deploy infrastructure
         if: github.ref == 'refs/heads/main'
