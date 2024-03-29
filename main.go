@@ -203,10 +203,12 @@ func generateActionYaml(p *protogen.Plugin, file *protogen.File, globals []proto
 	g.P("name: 'Liquibase " + c.String(cmdReadable) + " Action'")
 	for _, l := range file.Proto.GetSourceCodeInfo().GetLocation() {
 		if l.GetLeadingComments() != "" {
+			g.P("description: |")
+			lc := strings.TrimSpace(l.GetLeadingComments())
 			if len(l.GetLeadingComments()) > 124 {
-				g.P("description: '" + fmt.Sprintf("%.121s", strings.TrimSpace(l.GetLeadingComments())) + "...'")
+				g.P("  " + fmt.Sprintf("%.121s", lc) + "...")
 			} else {
-				g.P("description: '" + strings.TrimSpace(l.GetLeadingComments()) + "'")
+				g.P("  " + lc)
 			}
 		}
 	}
@@ -293,10 +295,10 @@ func generateBashEntry(p *protogen.Plugin, file *protogen.File, globals []protor
 		var cmd string
 		s := strings.TrimPrefix(string(message.Messages[0].Desc.FullName()), "liquibase.")
 		for _, c := range strings.Split(s, ".") {
-            d := strings.TrimSuffix(c, "Request")
-            if d == "pro" {
-                continue
-            }
+			d := strings.TrimSuffix(c, "Request")
+			if d == "pro" {
+				continue
+			}
 			str := stringy.New(d)
 			cmd += str.KebabCase().ToLower() + " "
 		}
