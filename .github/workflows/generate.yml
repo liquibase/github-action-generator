@@ -20,7 +20,7 @@ jobs:
       - id: set-matrix
         run: echo "matrix=$(cat commands.json)" >> $GITHUB_OUTPUT
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: commands-$LIQUIBASE_VERSION
           path: commands.json
