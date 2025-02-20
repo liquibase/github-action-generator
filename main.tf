@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "github" {
-  token = var.BOT_TOKEN_TEST
+  token = var.BOT_TOKEN
   owner = "liquibase-github-actions"
 }
 
