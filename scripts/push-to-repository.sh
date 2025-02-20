@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ -z "$BOT_TOKEN" ]]; then
+if [[ -z "$BOT_TOKEN_TEST" ]]; then
   echo "Set the BOT_TOKEN env variable."
 	exit 1
 fi
