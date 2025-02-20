@@ -1,5 +1,6 @@
 name: Generate Action
 
+
 on:
   workflow_dispatch:
 
@@ -27,7 +28,7 @@ jobs:
 
   create-action-repo:
     env:
-      TF_VAR_BOT_TOKEN: ${{ secrets.BOT_TOKEN_TEST }}
+      TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
       SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
       SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
