@@ -1,10 +1,11 @@
 name: Generate Action
 
+
 on:
   workflow_dispatch:
 
 env:
-  LIQUIBASE_VERSION: 4.28.0
+  LIQUIBASE_VERSION: 4.31.1
 
 jobs:
   create-command-list:
@@ -20,14 +21,14 @@ jobs:
       - id: set-matrix
         run: echo "matrix=$(cat commands.json)" >> $GITHUB_OUTPUT
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: commands-$LIQUIBASE_VERSION
           path: commands.json
 
   create-action-repo:
     env:
-      TF_VAR_BOT_TOKEN: ${{ secrets.GHA_GENERATOR_ADMIN_TOKEN }}
+      TF_VAR_BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
       SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
       SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
@@ -37,12 +38,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+          terraform_wrapper: false
+          
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: commands-$LIQUIBASE_VERSION
           path: ./
@@ -113,7 +120,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: commands-$LIQUIBASE_VERSION
           path: ./
