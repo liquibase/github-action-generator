@@ -57,6 +57,9 @@ create_release() {
 # Copy generated files to temp dir
 cp $COMMAND_DIR/* $TEMP_DIR
 
+# Copy LICENSE file from root directory to temp dir
+cp $PWD/LICENSE $TEMP_DIR/
+
 if [[ `git status --porcelain` ]]; then
   # Commit new files
   git add *
