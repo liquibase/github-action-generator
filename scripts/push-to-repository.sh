@@ -4,14 +4,16 @@ set -e
 
 if [[ -z "$BOT_TOKEN" ]]; then
   echo "Set the BOT_TOKEN env variable."
-	exit 1
+    exit 1
 fi
 
+# Store absolute paths at the beginning
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 COMMAND="${1/ /-}" #replace spaces with dashes
 TAG=$2
 REPO="https://liquibot:$BOT_TOKEN@github.com/liquibase-github-actions/$COMMAND.git"
-COMMAND_DIR="$PWD/action/${COMMAND//-/_}" #replace dashes with underscore
-TEMP_DIR="$PWD/action/temp"
+COMMAND_DIR="$BASE_DIR/action/${COMMAND//-/_}" #replace dashes with underscore
+TEMP_DIR="$BASE_DIR/action/temp"
 
 create_issue() {
   local COMMAND=$1
@@ -58,7 +60,7 @@ create_release() {
 cp $COMMAND_DIR/* $TEMP_DIR
 
 # Copy LICENSE file from root directory to temp dir
-cp $PWD/LICENSE $TEMP_DIR/
+cp $BASE_DIR/LICENSE $TEMP_DIR/
 
 if [[ `git status --porcelain` ]]; then
   # Commit new files
