@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: '5 6 * * *'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   update-workflow:
     runs-on: ubuntu-latest
@@ -19,7 +23,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.BOT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Automatic update to generate.yml
           committer: liquibot <liquibot@liquibase.org>
           author: liquibot <liquibot@liquibase.org>
