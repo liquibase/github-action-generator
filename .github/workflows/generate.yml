@@ -4,14 +4,6 @@ name: Generate Action
 on:
   workflow_dispatch:
 
-# Add permissions needed for the workflow
-# permissions:
-#   contents: write    # For checkout, pushing to repositories
-#   actions: read      # For workflow operations
-#   packages: write    # For package operations if needed
-#   id-token: write    # For authentication operations
-#   issues: write      # For creating issues if needed
-
 env:
   LIQUIBASE_VERSION: 4.32.0
 
@@ -54,6 +46,9 @@ jobs:
           permission-workflows: write
           permission-issues: write
 
+      - name: Set token in environment
+        run: echo "TF_VAR_GITHUB_TOKEN=${{ steps.get-token.outputs.token }}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
 
       - name: Setup OpenTofu
@@ -73,30 +68,20 @@ jobs:
 
       - name: OpenTofu Format
         id: fmt
-        env:
-          TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: tofu fmt
 
       - name: OpenTofu Init
         id: init
-        env:
-          TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: tofu init
 
       - name: OpenTofu Validate
         id: validate
-        env:
-          TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: tofu validate -no-color
 
       - name: Preview infrastructure
-        env:
-            TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
 
       - name: Mount commands.json
-        env:
-          TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: |
           spacectl stack environment mount --id liquibase-github-actions source/commands.json commands.json
 
@@ -106,7 +91,6 @@ jobs:
           SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
-          TF_VAR_GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
         run: |
           spacectl stack set-current-commit --id liquibase-github-actions --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-github-actions --auto-confirm 
