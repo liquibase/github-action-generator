@@ -17,13 +17,10 @@ jobs:
       
       - name: Update Workflow
         run: ./scripts/get-latest-release.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Automatic update to generate.yml
           committer: liquibot <liquibot@liquibase.org>
           author: liquibot <liquibot@liquibase.org>
