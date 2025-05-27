@@ -13,7 +13,7 @@ permissions:
   issues: write      # For creating issues if needed
 
 env:
-  LIQUIBASE_VERSION: 4.31.1
+  LIQUIBASE_VERSION: 4.32.0
 
 jobs:
   create-command-list:
