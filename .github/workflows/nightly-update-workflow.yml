@@ -5,25 +5,34 @@ on:
   schedule:
     - cron: '5 6 * * *'
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
   update-workflow:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Get GitHub App token
+        id: get-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.LIQUIBASE_GITHUB_APP_ID }}
+          private-key: ${{ secrets.LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
+          owner: liquibase
+          repositories: |
+            liquibase
+            github-action-generator
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
 
       - name: Update Workflow
         run: ./scripts/get-latest-release.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.get-token.outputs.token }}
           commit-message: Automatic update to generate.yml
           committer: liquibot <liquibot@liquibase.org>
           author: liquibot <liquibot@liquibase.org>
