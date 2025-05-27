@@ -5,9 +5,13 @@ on:
   schedule:
     - cron: '5 6 * * *'
 
+# Add permissions needed for the workflow
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write    # For checkout, pushing to repositories
+  actions: read      # For workflow operations
+  packages: write    # For package operations if needed
+  id-token: write    # For authentication operations
+  issues: write      # For creating issues if needed
 
 jobs:
   update-workflow:
