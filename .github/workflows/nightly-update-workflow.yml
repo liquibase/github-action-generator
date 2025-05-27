@@ -19,7 +19,7 @@ jobs:
           owner: liquibase
           repositories: |
             liquibase
-            liquibase-github-actions
+            github-action-generator
           permission-contents: write
           permission-pull-requests: write
 
