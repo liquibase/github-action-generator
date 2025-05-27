@@ -8,30 +8,22 @@ on:
 jobs:
   update-workflow:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
-      - name: Get GitHub App token
-        id: get-token
-        uses: actions/create-github-app-token@v2
-        with:
-          app-id: ${{ secrets.LIQUIBASE_GITHUB_APP_ID }}
-          private-key: ${{ secrets.LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
-          owner: liquibase
-          repositories: |
-            liquibase
-            liquibase-github-actions
-          permission-contents: write
-          permission-pull-requests: write
-
+      
       - name: Update Workflow
         run: ./scripts/get-latest-release.sh
         env:
-          GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ steps.get-token.outputs.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Automatic update to generate.yml
           committer: liquibot <liquibot@liquibase.org>
           author: liquibot <liquibot@liquibase.org>
