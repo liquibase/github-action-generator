@@ -8,8 +8,13 @@ terraform {
 }
 
 provider "github" {
-  token = var.GITHUB_TOKEN
   owner = "liquibase-github-actions"
+  app_auth {
+    id              = var.LIQUIBASE_TERRAFORM_GH_APP_ID
+    installation_id = var.LIQUIBASE_TERRAFORM_GH_INSTALL_ID_ACTIONS
+    pem_file        = file(var.LIQUIBASE_TERRAFORM_GH_APP_PRIVATE_KEY)
+  }
+  write_delay_ms = 200 # Performance tuning
 }
 
 locals {
