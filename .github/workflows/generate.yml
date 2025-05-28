@@ -4,14 +4,6 @@ name: Generate Action
 on:
   workflow_dispatch:
 
-# Add permissions needed for the workflow
-permissions:
-  contents: write    # For checkout, pushing to repositories
-  actions: read      # For workflow operations
-  packages: write    # For package operations if needed
-  id-token: write    # For authentication operations
-  issues: write      # For creating issues if needed
-
 env:
   LIQUIBASE_VERSION: 4.32.0
 
@@ -36,7 +28,6 @@ jobs:
 
   create-action-repo:
     env:
-      TF_VAR_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_KEY }}
       SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
       SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
@@ -44,13 +35,26 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ create-command-list ]
     steps:
+      - name: Get GitHub App token
+        id: get-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.LIQUIBASE_GITHUB_APP_ID }}
+          private-key: ${{ secrets.LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          permission-contents: read
+          permission-workflows: write
+          permission-issues: write
+
+      - name: Set token in environment
+        run: echo "TF_VAR_GITHUB_TOKEN=${{ steps.get-token.outputs.token }}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
         with:
-          terraform_version: "1.5.7"
-          terraform_wrapper: false
+          tofu_version: "1.9.0"
           
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@main
@@ -62,17 +66,17 @@ jobs:
           name: commands-$LIQUIBASE_VERSION
           path: ./
 
-      - name: Terraform Format
+      - name: OpenTofu Format
         id: fmt
-        run: terraform fmt
+        run: tofu fmt
 
-      - name: Terraform Init
+      - name: OpenTofu Init
         id: init
-        run: terraform init
+        run: tofu init
 
-      - name: Terraform Validate
+      - name: OpenTofu Validate
         id: validate
-        run: terraform validate -no-color
+        run: tofu validate -no-color
 
       - name: Preview infrastructure
         run: spacectl stack local-preview --id liquibase-github-actions --disregard-gitignore=true
@@ -111,6 +115,17 @@ jobs:
 
       - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
 
+      - name: Get GitHub App token
+        id: get-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.LIQUIBASE_GITHUB_APP_ID }}
+          private-key: ${{ secrets.LIQUIBASE_GITHUB_APP_PRIVATE_KEY }}
+          owner: liquibase-github-actions
+          # permissions required to perform operations from push-to-repository.sh
+          permission-contents: write # Required for git push, tag, clone 
+          permission-issues: write # Required for creating issues
+
       - name: Configure git user
         run: |
           git config --global init.defaultBranch main
@@ -120,7 +135,7 @@ jobs:
       - name: Push Action to Repo
         run: ./scripts/push-to-repository.sh "${{ matrix.commands }}" $LIQUIBASE_VERSION
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.get-token.outputs.token }}
 
   output-action:
     runs-on: ubuntu-latest
