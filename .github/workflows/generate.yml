@@ -46,9 +46,6 @@ jobs:
           permission-workflows: write
           permission-issues: write
 
-      - name: Set token in environment
-        run: echo "TF_VAR_GITHUB_TOKEN=${{ steps.get-token.outputs.token }}" >> $GITHUB_ENV
-
       - uses: actions/checkout@v4
 
       - name: Setup OpenTofu
