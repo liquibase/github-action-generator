@@ -5,6 +5,7 @@
 ## Migration Information
 
 ### Current Approach (Supports Liquibase 4.x)
+
 ```yaml
 # Individual actions - supported through Liquibase 4.x
 - uses: liquibase-github-actions/update@v4.32.0
@@ -14,6 +15,7 @@
 ```
 
 ### Recommended for Liquibase 5.0+ Features
+
 ```yaml
 # Single setup action with latest Liquibase versions
 - uses: liquibase/setup-liquibase@v1
@@ -25,7 +27,8 @@
 
 ## About This Repository (Historical)
 
-Main repository for the tools and automation to generate Liquibase GitHub Actions at https://github.com/liquibase-github-actions. Uses generated protobuf files from https://github.com/liquibase/protobuf-generator to create an action for each Liquibase command. 
+Main repository for the tools and automation to generate Liquibase GitHub Actions at <https://github.com/liquibase-github-actions>. Uses generated protobuf files from <https://github.com/liquibase/protobuf-generator> to create an action for each Liquibase command.
+
 ```mermaid
 graph LR
     A[Create Command List] --> |commands.json| B[Terraform]
