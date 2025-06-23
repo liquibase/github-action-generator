@@ -1,24 +1,24 @@
 # GitHub Actions Generator
 
-⚠️ **DEPRECATED**: This project and all generated individual Liquibase GitHub Actions will be discontinued with Liquibase 5.0. Please migrate to [`liquibase/setup-liquibase`](https://github.com/liquibase/setup-liquibase) for continued support.
+⚠️ **VERSION SUPPORT NOTICE**: This project and all generated individual Liquibase GitHub Actions support Liquibase versions up to 4.x. For Liquibase 5.0+ features and continued updates, please migrate to [`liquibase/setup-liquibase`](https://github.com/liquibase/setup-liquibase).
 
 ## Migration Information
 
-### Old Approach (Individual Actions - DEPRECATED)
+### Current Approach (Supports Liquibase 4.x)
 ```yaml
-# Multiple individual actions for each command
+# Individual actions - supported through Liquibase 4.x
 - uses: liquibase-github-actions/update@v4.32.0
   with:
     changelogFile: 'changelog.xml'
     url: 'jdbc:h2:mem:test'
 ```
 
-### New Approach (Recommended)
+### Recommended for Liquibase 5.0+ Features
 ```yaml
-# Single setup action, then run any command
+# Single setup action with latest Liquibase versions
 - uses: liquibase/setup-liquibase@v1
   with:
-    version: '4.32.0'
+    version: '5.0.0'  # Supports 5.0+ features
     edition: 'oss'
 - run: liquibase update --changelog-file=changelog.xml --url=jdbc:h2:mem:test
 ```
