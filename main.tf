@@ -8,7 +8,7 @@ terraform {
 }
 
 module "devops_vault_secrets" {
-  source      = "../modules/vault-secrets"
+  source      = "modules/vault-secrets"
   vault_type  = "devops"
   secret_keys = ["LIQUIBASE_TERRAFORM_GH_APP_ID", "LIQUIBASE_TERRAFORM_GH_INSTALL_ID", "LIQUIBASE_TERRAFORM_GH_APP_PRIVATE_KEY"]
 }
