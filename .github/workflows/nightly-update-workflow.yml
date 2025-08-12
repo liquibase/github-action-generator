@@ -9,7 +9,7 @@ jobs:
   update-workflow:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Get GitHub App token
         id: get-token
         uses: actions/create-github-app-token@v2
