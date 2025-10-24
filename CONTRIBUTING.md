@@ -2,7 +2,7 @@
 
 ## 🚨 Repository Status: DEPRECATED
 
-This repository is **deprecated** and in **maintenance-only mode** as of the completion of [DAT-21042](https://datical.atlassian.net/browse/DAT-21042).
+This repository is **deprecated** and in **maintenance-only mode**.
 
 ### What This Means
 
