@@ -1,6 +1,6 @@
 name: Generate Action
 
-# ⚠️ DEPRECATED: This workflow is part of the deprecated GitHub micro actions (DAT-21042)
+# ⚠️ DEPRECATED: This workflow is part of the deprecated GitHub micro actions
 # The liquibase-github-actions organization is deprecated in favor of liquibase/setup-liquibase
 # This workflow should only be run for emergency security patches to Liquibase 4.x actions
 # For Liquibase 5.x and beyond, use https://github.com/liquibase/setup-liquibase
