@@ -30,7 +30,9 @@ locals {
 resource "github_repository" "liquibase-github-actions" {
   for_each      = toset(local.commands)
   name          = replace(each.key, " ", "-")
-  description   = "Official GitHub Action to run Liquibase ${title(replace(each.key, "-", " "))}"
+  description   = "🚨 DEPRECATED - Use liquibase/setup-liquibase | Official GitHub Action to run Liquibase ${title(replace(each.key, "-", " "))}"
+  homepage_url  = "https://github.com/liquibase/setup-liquibase"
+  topics        = ["deprecated", "liquibase-4x-only", "migrate-to-setup-liquibase"]
   visibility    = "public"
   has_downloads = false
   has_issues    = false
