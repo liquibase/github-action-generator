@@ -8,7 +8,6 @@ This repository is **deprecated** and in **maintenance-only mode**.
 
 - **No new features** will be accepted
 - **No enhancements** will be implemented
-- **Only critical security patches** for Liquibase 4.x compatibility will be considered
 - All users should migrate to [`liquibase/setup-liquibase`](https://github.com/liquibase/setup-liquibase)
 
 ### Migration Path
