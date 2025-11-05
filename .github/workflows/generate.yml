@@ -1,5 +1,8 @@
 name: Generate Action
 
+# ⚠️ DEPRECATED: This workflow is part of the deprecated GitHub micro actions
+# The liquibase-github-actions organization is deprecated in favor of liquibase/setup-liquibase
+# For Liquibase 5.x and beyond, use https://github.com/liquibase/setup-liquibase
 
 on:
   workflow_dispatch:

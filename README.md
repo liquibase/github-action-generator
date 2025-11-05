@@ -1,8 +1,14 @@
 # GitHub Actions Generator
 
-⚠️ **VERSION SUPPORT NOTICE**: This project and all generated individual Liquibase GitHub Actions will continue to be supported for Liquibase 4.x. Starting with Liquibase 5.x, they will no longer be supported.
+# 🚨 DEPRECATED - This Repository is End of Life
 
-**Migration to [`liquibase/setup-liquibase`](https://github.com/liquibase/setup-liquibase)**: Available for Liquibase versions 4.32.0 and above. If you're using an older version, upgrade your Liquibase version first.
+⚠️ **This project and all generated individual Liquibase GitHub Actions are deprecated and will not receive updates for Liquibase 5.x and beyond.**
+
+## ✅ Migration Required
+
+**Migrate to [`liquibase/setup-liquibase`](https://github.com/liquibase/setup-liquibase)**: This is the official, unified action for all Liquibase versions 4.32.0 and above.
+
+If you're using an older Liquibase version, upgrade to 4.32.0+ first, then migrate to setup-liquibase.
 
 ## Migration Information
 
@@ -20,7 +26,7 @@
 
 ```yaml
 # Single setup action - requires Liquibase 4.32.0 or higher
-- uses: liquibase/setup-liquibase@v1
+- uses: liquibase/setup-liquibase@v2
   with:
     version: '4.32.0'  # Requires 4.32.0 or higher
     edition: 'oss'

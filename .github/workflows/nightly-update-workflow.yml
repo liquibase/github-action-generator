@@ -1,9 +1,10 @@
 name: Update Generate Workflow
 
+# DEPRECATED: This workflow is disabled as part of the GitHub micro actions deprecation
+# The liquibase-github-actions organization is deprecated in favor of liquibase/setup-liquibase
+
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '5 6 * * *'
 
 jobs:
   update-workflow:
