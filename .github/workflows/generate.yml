@@ -16,7 +16,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: create list
         run: make create-list VERSION=$LIQUIBASE_VERSION
@@ -49,7 +49,7 @@ jobs:
           permission-workflows: write
           permission-issues: write
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
@@ -103,7 +103,7 @@ jobs:
       matrix:
         commands: ${{ fromJSON(needs.create-command-list.outputs.matrix) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - run: echo ${{ matrix.commands }}
 
@@ -141,7 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ generate-action ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: actions/download-artifact@v4
         with:
