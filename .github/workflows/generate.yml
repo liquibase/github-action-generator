@@ -108,10 +108,9 @@ jobs:
       - run: echo ${{ matrix.commands }}
 
       - name: Install Protoc
-        uses: arduino/setup-protoc@v3
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
 
       - run: make generate VERSION=$LIQUIBASE_VERSION COMMAND="${{ matrix.commands }}"
 
