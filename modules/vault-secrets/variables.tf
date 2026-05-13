@@ -1,9 +1,9 @@
 variable "vault_type" {
-  description = "The type of vault to access (liquibase, lbio, devops)"
+  description = "The type of vault to access (liquibase, devops)"
   type        = string
   validation {
-    condition     = contains(["liquibase", "lbio", "devops"], var.vault_type)
-    error_message = "Vault type must be one of: liquibase, lbio, devops."
+    condition     = contains(["liquibase", "devops"], var.vault_type)
+    error_message = "Vault type must be one of: liquibase, devops."
   }
 }
 

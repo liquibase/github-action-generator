@@ -2,20 +2,17 @@
 locals {
   vault_names = {
     liquibase = "liquibase-vault"
-    lbio      = "lbio-vault"
     devops    = "devops-vault"
   }
 
   # The actual secret names in AWS Secrets Manager (using paths, not names)
   vault_secret_names = {
     liquibase = "/vault/liquibase"
-    lbio      = "/vault/lbio"
     devops    = "/vault/devops"
   }
 
   vault_paths = {
     liquibase = "/vault/liquibase"
-    lbio      = "/vault/lbio"
     devops    = "/vault/devops"
   }
 
@@ -23,7 +20,6 @@ locals {
   # These are dynamically retrieved from the vault-manager remote state
   default_role_arns = {
     liquibase = data.terraform_remote_state.vault_manager.outputs.liquibase_vault_role_arn
-    lbio      = data.terraform_remote_state.vault_manager.outputs.lbio_vault_role_arn
     devops    = data.terraform_remote_state.vault_manager.outputs.devops_vault_role_arn
   }
 
