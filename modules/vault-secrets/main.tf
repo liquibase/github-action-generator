@@ -2,29 +2,25 @@
 locals {
   vault_names = {
     liquibase = "liquibase-vault"
-    # lbio    = "lbio-vault"   # deprecated — TECHOPS-161
-    devops = "devops-vault"
+    devops    = "devops-vault"
   }
 
   # The actual secret names in AWS Secrets Manager (using paths, not names)
   vault_secret_names = {
     liquibase = "/vault/liquibase"
-    # lbio    = "/vault/lbio"   # deprecated — TECHOPS-161
-    devops = "/vault/devops"
+    devops    = "/vault/devops"
   }
 
   vault_paths = {
     liquibase = "/vault/liquibase"
-    # lbio    = "/vault/lbio"   # deprecated — TECHOPS-161
-    devops = "/vault/devops"
+    devops    = "/vault/devops"
   }
 
   # Default OIDC role ARNs for each vault type
   # These are dynamically retrieved from the vault-manager remote state
   default_role_arns = {
     liquibase = data.terraform_remote_state.vault_manager.outputs.liquibase_vault_role_arn
-    # lbio    = data.terraform_remote_state.vault_manager.outputs.lbio_vault_role_arn  # deprecated — TECHOPS-161 (output removed from vault-manager)
-    devops = data.terraform_remote_state.vault_manager.outputs.devops_vault_role_arn
+    devops    = data.terraform_remote_state.vault_manager.outputs.devops_vault_role_arn
   }
 
   # Use provided role ARN or default to vault-specific OIDC role

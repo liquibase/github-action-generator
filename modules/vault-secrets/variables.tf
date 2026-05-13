@@ -2,7 +2,6 @@ variable "vault_type" {
   description = "The type of vault to access (liquibase, devops)"
   type        = string
   validation {
-    # "lbio" removed from list — TECHOPS-161 (vault deprecated)
     condition     = contains(["liquibase", "devops"], var.vault_type)
     error_message = "Vault type must be one of: liquibase, devops."
   }

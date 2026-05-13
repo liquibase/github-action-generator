@@ -7,7 +7,7 @@ A Terraform module for directly accessing AWS Secrets Manager vaults created by 
 - **Direct AWS Secrets Manager Access**: Queries secrets directly from AWS without remote state dependencies
 - **Cross-Account Authentication**: Uses cross-account IAM role assumption for secure vault access
 - **OIDC and Spacelift Support**: Works with both GitHub OIDC and Spacelift role authentication
-- **Vault Selection**: Support for vault types (liquibase, devops) — *lbio deprecated (TECHOPS-161)*
+- **Vault Selection**: Support for vault types (liquibase, devops)
 - **Selective Secret Access**: Ability to retrieve specific secrets or all secrets from a vault
 - **File Content Access**: Direct access to file-type secrets (like PEM keys) via module outputs
 - **Real-time Updates**: Automatically reflects secret changes without Terraform refreshes
@@ -17,7 +17,6 @@ A Terraform module for directly accessing AWS Secrets Manager vaults created by 
 | Vault Type | Secret Path | Description | Access Pattern |
 |------------|-------------|-------------|----------------|
 | `liquibase` | `/vault/liquibase` | Repo-wide secrets (LIQUIBOT_PAT_GPM_ACCESS, SONATYPE_USERNAME, etc.) | All repos in liquibase/datical orgs |
-| ~~`lbio`~~ | ~~`/vault/lbio`~~ | ~~LBIO-specific secrets~~ — **deprecated (TECHOPS-161)** | n/a |
 | `devops` | `/vault/devops` | DevOps internal tooling secrets | liquibase-infrastructure repo only |
 
 ## Usage
@@ -111,7 +110,6 @@ provider "github" {
 This module uses cross-account IAM role assumption to access vault secrets in the vault-manager AWS account (339712820770). It can be used from different AWS accounts by assuming the appropriate vault-specific OIDC roles:
 
 - **liquibase vault**: `arn:aws:iam::339712820770:role/liquibase-vault-oidc-role`
-- ~~**lbio vault**: `arn:aws:iam::339712820770:role/lbio-vault-oidc-role`~~ — **deprecated (TECHOPS-161)**
 - **devops vault**: `arn:aws:iam::339712820770:role/devops-vault-oidc-role`
 
 The module automatically retrieves these role ARNs from the vault-manager remote state, or you can provide a custom `role_arn` parameter.
@@ -215,7 +213,7 @@ No modules.
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region where the secrets are stored | `string` | `"us-east-1"` | no |
 | <a name="input_role_arn"></a> [role\_arn](#input\_role\_arn) | ARN of the IAM role to assume for accessing the vault. If not provided, will use the default vault-specific OIDC role. | `string` | `null` | no |
 | <a name="input_secret_keys"></a> [secret\_keys](#input\_secret\_keys) | List of specific secret keys to retrieve from the vault. If empty, all secrets will be returned. | `list(string)` | `[]` | no |
-| <a name="input_vault_type"></a> [vault\_type](#input\_vault\_type) | The type of vault to access (liquibase, lbio, devops) | `string` | n/a | yes |
+| <a name="input_vault_type"></a> [vault\_type](#input\_vault\_type) | The type of vault to access (liquibase, devops) | `string` | n/a | yes |
 
 ## Outputs
 
